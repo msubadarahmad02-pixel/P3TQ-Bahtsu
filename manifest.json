@@ -1,6 +1,6 @@
 {
   "name": "yakuza",
-  "short_name": "Pena Kanza",
+  "short_name": "yakuza",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
