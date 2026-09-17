@@ -4,8 +4,8 @@ const QURAN_CACHE = 'quran-images-v1'; // Cache khusus untuk gambar Qur'an
 
 const ASSETS_TO_CACHE = [
   './',
-  './icon.png',
-  './catur.html',
+  './img/icon2.png',
+  './index.html',
   './catur.css',
   './catur.js',
   './ai-worker.js',
