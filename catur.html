@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Catur Online / Offline</title>
+    <link rel="stylesheet" href="catur.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Panel Status Turn & Reset -->
+        <div class="status-panel">
+            <div id="status">Giliran: <span id="turn">Putih</span></div>
+            <button id="reset-btn" class="btn-small">Mulai Ulang</button>
+        </div>
+
+                <!-- Panel Room Online & Komputer -->
+        <div class="room-panel">
+           
+            <div class="room-buttons">
+                <button id="create-room-btn" class="btn-small">Buat Room</button>
+                <button id="vs-computer-btn" class="btn-small btn-vs-comp">Komputer</button>
+                <button id="join-room-btn" class="btn-small btn-join">Masuk Room</button>
+            </div>
+           <input type="text" id="room-id" placeholder="Masukkan ID Room..." />
+          
+        </div>
+
+
+        <!-- Papan Catur -->
+        <div id="board" class="board"></div>
+    </div>
+
+    <!-- Modal Pop-Up Notifikasi Kustom -->
+    <div id="customAlert" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon">🏆</div>
+            <div id="modalMessage" class="modal-message">Pesan Notifikasi</div>
+            <button onclick="closeAlert()" class="modal-btn">Oke</button>
+        </div>
+    </div>
+
+    <!-- Library Supabase (Wajib di atas catur.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="catur.js"></script>
+</body>
+</html>
