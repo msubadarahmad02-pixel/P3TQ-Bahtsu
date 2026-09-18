@@ -168,15 +168,20 @@ async function handleSquareClick(r, c) {
             
             updateTurnUI();
 
+            // Kirim ke Supabase jika mode Online
             if (currentRoomId) {
-                await supabaseClient.from('catur_rooms').update({
-                    board_state: JSON.stringify(boardState),
-                    current_turn: currentTurn
-                }).eq('room_id', currentRoomId);
+                try {
+                    await supabaseClient.from('catur_rooms').update({
+                        board_state: JSON.stringify(boardState),
+                        current_turn: currentTurn
+                    }).eq('room_id', currentRoomId);
+                } catch (err) {
+                    console.error("Gagal update room:", err);
+                }
             } else if (isComputerMode && currentTurn === 'black') {
                 setTimeout(() => {
                     makeComputerMove();
-                }, 50);
+                }, 200);
             }
         }
     } else {
@@ -187,6 +192,7 @@ async function handleSquareClick(r, c) {
         }
     }
 }
+
 
 function updateTurnUI() {
     let turnName = currentTurn === 'white' ? 'Putih' : 'Hitam';
@@ -476,7 +482,6 @@ joinRoomBtn.addEventListener('click', async () => {
     }
 });
 
-// Listener Realtime Supabase
 function listenToRoom(roomId) {
     supabaseClient
         .channel(`room:${roomId}`)
@@ -487,12 +492,20 @@ function listenToRoom(roomId) {
             filter: `room_id=eq.${roomId}`
         }, payload => {
             const data = payload.new;
-            boardState = typeof data.board_state === 'string' ? JSON.parse(data.board_state) : data.board_state;
-            currentTurn = data.current_turn;
-            updateTurnUI();
+            if (data && data.board_state) {
+                boardState = typeof data.board_state === 'string' ? JSON.parse(data.board_state) : data.board_state;
+                currentTurn = data.current_turn;
+                
+                // Reset pilihan jika giliran berganti dari lawan
+                selectedSquare = null;
+                validMoves = [];
+                
+                updateTurnUI();
+            }
         })
         .subscribe();
 }
+
 
 // Mode Komputer
 vsComputerBtn.addEventListener('click', () => {
