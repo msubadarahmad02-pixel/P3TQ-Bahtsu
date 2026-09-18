@@ -1,0 +1,308 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f0f0f0; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: sans-serif;
+    padding: 10px;
+}
+
+.container {
+    background-color: #fff8e1;
+    border-radius: 20px;
+    padding: 15px 5px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.18;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><text x='20' y='40' fill='%238c0000' font-size='20' font-family='Caveat' transform='rotate(15, 20, 40)'>❇️</text><text x='120' y='80' fill='%238c0000' font-size='18' font-family='Caveat' transform='rotate(-25, 120, 80)'>❇️</text><text x='60' y='150' fill='%238c0000' font-size='22' font-family='Caveat' transform='rotate(45, 60, 150)'>❇️</text><text x='150' y='170' fill='%238c0000' font-size='16' font-family='Caveat' transform='rotate(-10, 150, 170)'>❇️</text></svg>");
+    background-repeat: repeat;
+    background-position: center;
+}
+
+.status-panel {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 12px;
+    border: 1px solid #d88998;
+    font-size: 1em;
+    font-weight: bold;
+    color: #5d4037;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#turn {
+    color: #c2185b;
+}
+
+/* --- BARU: STYLE ROOM PANEL --- */
+.room-panel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid #d88998;
+}
+
+#room-id {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1.5px solid #8b4513;
+    border-radius: 8px;
+    outline: none;
+    font-size: 0.9em;
+    text-align: center;
+    font-weight: bold;
+    color: #5d4037;
+}
+
+#room-id:focus {
+    border-color: #c2185b;
+}
+
+.room-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.room-buttons button {
+    flex: 1;
+}
+
+.btn-join {
+    background-color: #8b4513 !important;
+}
+
+.btn-join:hover {
+    background-color: #c2185b !important;
+}
+
+/* Tombol Biasa */
+.btn-small {
+    background-color: #8b4513;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 8px 12px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-small:hover {
+    background-color: #c2185b;
+}
+
+.btn-small:active {
+    transform: scale(0.95);
+}
+
+/* Papan Catur */
+.board {
+    display: grid;
+    grid-template-columns: repeat(8, 46px);
+    grid-template-rows: repeat(8, 46px);
+    border: 2px solid #8b4513;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.square {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.square.light {
+    background-color: #fff8e1;
+}
+
+.square.dark {
+    background-color: #d7ccc8;
+}
+
+.square.selected {
+    background-color: #f8bbd0 !important;
+}
+
+.piece-white {
+    color: #8b4513;
+    text-shadow: 0px 0px 2px #ffffff;
+}
+
+.piece-black {
+    color: #000000;
+    text-shadow: 0px 0px 1px #ffffff;
+}
+
+.square.possible-move::after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background-color: rgba(194, 24, 91, 0.4);
+    border-radius: 50%;
+}
+
+/* Modal Pop-up */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 9999;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-box {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    width: 85%;
+    max-width: 300px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(139, 69, 19, 0.15);
+    border: 1px solid #f1e5db;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.show .modal-box {
+    transform: scale(1);
+}
+
+.modal-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.modal-message {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 15px;
+    color: #4a3b32;
+    font-weight: bold;
+    margin-bottom: 18px;
+    line-height: 1.4;
+}
+
+.modal-btn {
+    background: #8b4513;
+    color: white;
+    padding: 8px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.modal-btn:hover {
+    background: #000000;
+}
+
+
+
+.btn-vs-comp {
+    background-color: #8b4513; /* Warna hijau */
+    color: white;
+}
+
+.btn-vs-comp:hover {
+    background-color: #c2185b;
+}
+
+/* Highlight untuk petak asal dan petak tujuan dari langkah terakhir */
+.square.last-move {
+    background-color: #eed8698a !important; /* Warna kuning kekuningan/emas soft */
+}
+
+/* Wrapper sebaris untuk Input dan Tombol Copy */
+.room-id-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+}
+
+.room-id-wrapper #room-id {
+    flex: 1; /* Input otomatis memenuhi sisa ruang di kiri */
+    margin-bottom: 0;
+}
+
+/* Style tombol copy ikon/teks */
+.copy-button {
+    background-color: #8b4513;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap; /* Agar teks tombol tidak terpotong ke bawah */
+}
+
+.copy-button:hover {
+    background-color: #c2185b;
+}
+
+.copy-button:active {
+    transform: scale(0.95);
+}
