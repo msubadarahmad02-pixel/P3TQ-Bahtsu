@@ -168,24 +168,22 @@ async function handleSquareClick(r, c) {
             
             updateTurnUI();
 
-          // Kirim ke Supabase jika mode Online
-if (currentRoomId) {
-    try {
-        await supabaseClient.from('catur_rooms').update({
-            board_state: JSON.stringify(boardState),
-            current_turn: currentTurn,
-            last_move: JSON.stringify(lastMove) // <-- TAMBAHKAN BARIS INI
-        }).eq('room_id', currentRoomId);
-    } catch (err) {
-        console.error("Gagal update room:", err);
-    }
-  
-} else if (isComputerMode && currentTurn === 'black') {
-    setTimeout(() => {
-        makeComputerMove();
-    }, 200);
-}
-
+            // Kirim ke Supabase jika mode Online
+            if (currentRoomId) {
+                try {
+                    await supabaseClient.from('catur_rooms').update({
+                        board_state: JSON.stringify(boardState),
+                        current_turn: currentTurn,
+                        last_move: JSON.stringify(lastMove)
+                    }).eq('room_id', currentRoomId);
+                } catch (err) {
+                    console.error("Gagal update room:", err);
+                }
+            } else if (isComputerMode && currentTurn === 'black') {
+                setTimeout(() => {
+                    makeComputerMove();
+                }, 200);
+            }
         }
     } else {
         if (clickedPiece && clickedPieceColor === currentTurn) {
@@ -201,6 +199,7 @@ if (currentRoomId) {
         }
     }
 }
+
 
 
 function updateTurnUI() {
