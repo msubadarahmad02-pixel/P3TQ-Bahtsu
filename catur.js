@@ -47,6 +47,11 @@ const createRoomBtn = document.getElementById('create-room-btn');
 const joinRoomBtn = document.getElementById('join-room-btn');
 const copyButton = document.getElementById('copyButton');
 
+// PERBAIKAN 1: Helper Clone Board Murni (Cepat & Aman)
+function cloneBoard(board) {
+    return board.map(row => row.slice());
+}
+
 function showAlert(pesan) {
     const modalMsg = document.getElementById('modalMessage');
     const customAlert = document.getElementById('customAlert');
@@ -61,7 +66,7 @@ function closeAlert() {
 
 // Inisialisasi Ulang Permainan
 function initGame(keepRoom = false) {
-    boardState = JSON.parse(JSON.stringify(initialBoard));
+    boardState = cloneBoard(initialBoard);
     currentTurn = 'white';
     selectedSquare = null;
     validMoves = [];
@@ -74,7 +79,6 @@ function initGame(keepRoom = false) {
     };
     isComputerMode = false;
 
-    // Bersihkan sesi room jika reset manual
     if (!keepRoom) {
         currentRoomId = null;
         playerColor = null;
@@ -168,7 +172,6 @@ async function handleSquareClick(r, c) {
             
             updateTurnUI();
 
-             // Kirim ke Supabase jika mode Online
             if (currentRoomId) {
                 try {
                     await supabaseClient.from('catur_rooms').update({
@@ -191,18 +194,11 @@ async function handleSquareClick(r, c) {
         if (clickedPiece && clickedPieceColor === currentTurn) {
             selectedSquare = { r, c };
             validMoves = getSafeMoves(r, c, boardState);
-            
-            // Jika bidak tidak bisa bergerak karena ter-pin atau Raja terancam
-            if (validMoves.length === 0) {
-                showWrongTurnWarning();
-            }
-            
+            // PERBAIKAN: Jangan panggil showWrongTurnWarning() jika tidak ada langkah agar tidak membingungkan
             renderBoard();
         }
     }
 }
-
-
 
 function updateTurnUI() {
     let turnName = currentTurn === 'white' ? 'Putih' : 'Hitam';
@@ -225,9 +221,7 @@ function updateTurnUI() {
     renderBoard();
 }
 
-// Peringatan Giliran Salah (Ganti Pop-up Modal)
 let warningTimeout = null;
-
 function showWrongTurnWarning() {
     if (!turnElement) return;
 
@@ -243,9 +237,11 @@ function showWrongTurnWarning() {
     }, 2000);
 }
 
+// PERBAIKAN 2: Logika Eksekusi Langkah yang Aman
 function makeMove(fromR, fromC, toR, toC, board) {
     const piece = board[fromR][fromC];
 
+    // Makan En Passant
     if (piece.toLowerCase() === 'p' && enPassantTarget && toR === enPassantTarget.r && toC === enPassantTarget.c) {
         const enemyPawnRow = piece === 'P' ? toR + 1 : toR - 1;
         board[enemyPawnRow][toC] = '';
@@ -254,20 +250,14 @@ function makeMove(fromR, fromC, toR, toC, board) {
     board[toR][toC] = piece;
     board[fromR][fromC] = '';
 
+    // PERBAIKAN: Hanya update state global jika eksekusi pada papan utama
     if (board === boardState) {
         if (piece.toLowerCase() === 'p' && Math.abs(fromR - toR) === 2) {
             enPassantTarget = { r: (fromR + toR) / 2, c: fromC };
         } else {
             enPassantTarget = null;
         }
-    }
 
-    if (piece.toLowerCase() === 'k' && Math.abs(fromC - toC) === 2) {
-        if (toC === 6) { board[toR][5] = board[toR][7]; board[toR][7] = ''; }
-        else if (toC === 2) { board[toR][3] = board[toR][0]; board[toR][0] = ''; }
-    }
-
-    if (board === boardState) {
         if (piece === 'K') hasMoved['K'] = true;
         if (piece === 'k') hasMoved['k'] = true;
         if (fromR === 7 && fromC === 7) hasMoved['R_k'] = true;
@@ -276,7 +266,14 @@ function makeMove(fromR, fromC, toR, toC, board) {
         if (fromR === 0 && fromC === 0) hasMoved['r_q'] = true;
         lastMove = { fromR, fromC, toR, toC };
     }
+
+    // Rokade
+    if (piece.toLowerCase() === 'k' && Math.abs(fromC - toC) === 2) {
+        if (toC === 6) { board[toR][5] = board[toR][7]; board[toR][7] = ''; }
+        else if (toC === 2) { board[toR][3] = board[toR][0]; board[toR][0] = ''; }
+    }
     
+    // Promosi
     if (board[toR][toC] === 'P' && toR === 0) board[toR][toC] = 'Q';
     if (board[toR][toC] === 'p' && toR === 7) board[toR][toC] = 'q';
 }
@@ -368,12 +365,13 @@ function getRawMoves(r, c, board) {
     return moves;
 }
 
+// PERBAIKAN 3: Kalkulasi Langkah Aman Tanpa Merusak State Utama
 function getSafeMoves(r, c, board) {
     const rawMoves = getRawMoves(r, c, board);
     const color = getPieceColor(board[r][c]);
 
     return rawMoves.filter(move => {
-        const tempBoard = JSON.parse(JSON.stringify(board));
+        const tempBoard = cloneBoard(board);
         makeMove(r, c, move.r, move.c, tempBoard);
         return !isInCheck(color, tempBoard);
     });
@@ -439,7 +437,6 @@ createRoomBtn.addEventListener('click', async () => {
     currentRoomId = roomId;
     playerColor = 'white';
 
-    // Simpan ke Sesi Lokal
     localStorage.setItem('active_room_id', roomId);
     localStorage.setItem('active_player_color', 'white');
 
@@ -476,7 +473,6 @@ joinRoomBtn.addEventListener('click', async () => {
         playerColor = 'black'; 
         isComputerMode = false;
 
-        // Simpan ke Sesi Lokal
         localStorage.setItem('active_room_id', roomId);
         localStorage.setItem('active_player_color', 'black');
         
@@ -492,6 +488,7 @@ joinRoomBtn.addEventListener('click', async () => {
     }
 });
 
+// PERBAIKAN 4: Sinkronisasi Supabase Realtime dengan Validasi Data yang Ketat
 function listenToRoom(roomId) {
     supabaseClient
         .channel(`room:${roomId}`)
@@ -503,41 +500,38 @@ function listenToRoom(roomId) {
         }, payload => {
             const data = payload.new;
             if (data && data.board_state) {
-                // 1. Ambil data papan dan giliran terlebih dahulu
                 boardState = typeof data.board_state === 'string' ? JSON.parse(data.board_state) : data.board_state;
                 currentTurn = data.current_turn;
 
-                // 2. Set lastMove SEBELUM mereset pilihan dan update UI
                 if (data.last_move) {
                     lastMove = typeof data.last_move === 'string' ? JSON.parse(data.last_move) : data.last_move;
                 } else {
                     lastMove = null;
                 }
 
-                // Restore variabel penunjang logika (BARU)
                 if (data.has_moved) {
                     hasMoved = typeof data.has_moved === 'string' ? JSON.parse(data.has_moved) : data.has_moved;
                 }
-                if (data.en_passant && data.en_passant !== 'null') {
-    enPassantTarget = typeof data.en_passant === 'string' ? JSON.parse(data.en_passant) : data.en_passant;
-} else {
-    enPassantTarget = null;
-}
 
+                // Handling En Passant yang aman dari null/string error
+                if (data.en_passant) {
+                    try {
+                        const parsed = typeof data.en_passant === 'string' ? JSON.parse(data.en_passant) : data.en_passant;
+                        enPassantTarget = (parsed && typeof parsed === 'object') ? parsed : null;
+                    } catch (e) {
+                        enPassantTarget = null;
+                    }
+                } else {
+                    enPassantTarget = null;
+                }
 
-                // 3. Reset state pilihan pemain
                 selectedSquare = null;
                 validMoves = [];
-
-                // 4. Baru render ulang tampilan papan dan status giliran
                 updateTurnUI();
             }
         })
         .subscribe();
 }
-
-
-
 
 // Mode Komputer
 vsComputerBtn.addEventListener('click', () => {
@@ -555,7 +549,6 @@ if (window.Worker) {
         const bestMove = e.data;
         if (bestMove) {
             makeMove(bestMove.fromR, bestMove.fromC, bestMove.toR, bestMove.toC, boardState);
-            // TAMBAHKAN BARIS INI: Simpan koordinat langkah terakhir Komputer
             lastMove = { 
                 fromR: bestMove.fromR, 
                 fromC: bestMove.fromC, 
@@ -575,7 +568,7 @@ function makeComputerMove() {
     }
 }
 
-// Fitur Copy ID Room
+// Copy ID Room
 if (copyButton) {
     copyButton.addEventListener('click', () => {
         const roomId = roomIdInput.value.trim();
@@ -594,14 +587,12 @@ if (copyButton) {
             showCopySuccess();
         }
 
-     // Ganti baris 330-335 pada catur_2.js
-function showCopySuccess() {
-    copyButton.innerHTML = '<i class="fas fa-check"></i>'; // Cukup tampilkan ikon centang
-    setTimeout(() => {
-        copyButton.innerHTML = '<i class="fas fa-copy"></i>'; // Kembali ke ikon copy
-    }, 1500);
-}
-
+        function showCopySuccess() {
+            copyButton.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => {
+                copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+            }, 1500);
+        }
 
         if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard.writeText(roomId)
@@ -613,56 +604,53 @@ function showCopySuccess() {
     });
 }
 
-// Fungsi Pemuatan Kembali Room jika Halaman Direfresh
+// Restore Room
 async function checkAndRestoreRoom() {
     const savedRoomId = localStorage.getItem('active_room_id');
     const savedColor = localStorage.getItem('active_player_color');
 
     if (savedRoomId && savedColor) {
-        const { data, error } = await supabaseClient
+        const { data } = await supabaseClient
             .from('catur_rooms')
             .select('*')
             .eq('room_id', savedRoomId)
             .single();
 
-        // Pada fungsi checkAndRestoreRoom()
-if (data) {
-    currentRoomId = savedRoomId;
-    playerColor = savedColor;
-    if (roomIdInput) roomIdInput.value = savedRoomId;
+        if (data) {
+            currentRoomId = savedRoomId;
+            playerColor = savedColor;
+            if (roomIdInput) roomIdInput.value = savedRoomId;
 
-    boardState = typeof data.board_state === 'string' ? JSON.parse(data.board_state) : data.board_state;
-    currentTurn = data.current_turn;
-    
-    // Set lastMove saat restore room
-    if (data.last_move) {
-        lastMove = typeof data.last_move === 'string' ? JSON.parse(data.last_move) : data.last_move;
-    }
+            boardState = typeof data.board_state === 'string' ? JSON.parse(data.board_state) : data.board_state;
+            currentTurn = data.current_turn;
+            
+            if (data.last_move) {
+                lastMove = typeof data.last_move === 'string' ? JSON.parse(data.last_move) : data.last_move;
+            }
 
-    // Restore variabel penunjang saat halaman dimuat ulang (BARU)
-    if (data.has_moved) {
-        hasMoved = typeof data.has_moved === 'string' ? JSON.parse(data.has_moved) : data.has_moved;
-    }
-   if (data.en_passant && data.en_passant !== 'null') {
-    enPassantTarget = typeof data.en_passant === 'string' ? JSON.parse(data.en_passant) : data.en_passant;
-} else {
-    enPassantTarget = null;
-}
+            if (data.has_moved) {
+                hasMoved = typeof data.has_moved === 'string' ? JSON.parse(data.has_moved) : data.has_moved;
+            }
 
-    
-    listenToRoom(savedRoomId);
-    updateTurnUI();
-    return;
-}
+            if (data.en_passant) {
+                try {
+                    const parsed = typeof data.en_passant === 'string' ? JSON.parse(data.en_passant) : data.en_passant;
+                    enPassantTarget = (parsed && typeof parsed === 'object') ? parsed : null;
+                } catch (e) {
+                    enPassantTarget = null;
+                }
+            } else {
+                enPassantTarget = null;
+            }
 
-
+            listenToRoom(savedRoomId);
+            updateTurnUI();
+            return;
+        }
     }
     
     initGame(false);
 }
 
-// Tombol Reset Manual
 resetBtn.addEventListener('click', () => initGame(false));
-
-// Jalankan Pengecekan Sesi Terakhir saat Halaman Dimuat
 checkAndRestoreRoom();
