@@ -424,7 +424,7 @@ function generateRandomRoomId() {
     for (let i = 0; i < 4; i++) {
         randomStr += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    return `ROOM-${randomStr}`;
+    return randomStr;
 }
 
 // Buat Room
