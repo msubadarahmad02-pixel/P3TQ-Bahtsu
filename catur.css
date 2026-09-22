@@ -155,6 +155,16 @@ body {
     font-size: clamp(20px, 8vw, 36px); /* Ukuran ikon catur fleksibel sesuai lebar layar */
     cursor: pointer;
     user-select: none;
+    touch-action: none;
+}
+
+/* Kursor berubah jadi ikon tangan saat bidak bisa di-drag */
+.square[draggable="true"] {
+    cursor: grab;
+}
+
+.square[draggable="true"]:active {
+    cursor: grabbing;
 }
 
 
