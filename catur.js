@@ -120,11 +120,54 @@ function renderBoard() {
             square.dataset.row = r;
             square.dataset.col = c;
 
+            // --- EVENT DRAG & DROP (Petak Tujuan) ---
+            square.addEventListener('dragover', (e) => {
+                e.preventDefault(); // Wajib agar petak bisa jadi area drop
+            });
+
+            square.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const fromR = parseInt(e.dataTransfer.getData('text/fromR'));
+                const fromC = parseInt(e.dataTransfer.getData('text/fromC'));
+
+                // Eksekusi jika petak asal dan tujuan berbeda
+                if (!isNaN(fromR) && !isNaN(fromC) && (fromR !== r || fromC !== c)) {
+                    selectedSquare = { r: fromR, c: fromC };
+                    validMoves = getSafeMoves(fromR, fromC, boardState);
+                    
+                    // Cek apakah petak tujuan valid
+                    const isMoveValid = validMoves.some(m => m.r === r && m.c === c);
+                    if (isMoveValid) {
+                        handleSquareClick(r, c); // Gunakan logika jalan yang sudah ada
+                    } else {
+                        selectedSquare = null;
+                        validMoves = [];
+                        renderBoard();
+                    }
+                }
+            });
+
             const pieceCode = boardState[r][c];
             if (pieceCode) {
                 square.textContent = PIECES[pieceCode];
-                const colorClass = getPieceColor(pieceCode) === 'white' ? 'piece-white' : 'piece-black';
+                const pieceColor = getPieceColor(pieceCode);
+                const colorClass = pieceColor === 'white' ? 'piece-white' : 'piece-black';
                 square.classList.add(colorClass);
+
+                // --- EVENT DRAG (Bidak yang Digeser) ---
+                // Buat bidak bisa di-drag jika sesuai giliran & warna pemain
+                if (pieceColor === currentTurn && (!playerColor || pieceColor === playerColor)) {
+                    square.setAttribute('draggable', 'true');
+
+                    square.addEventListener('dragstart', (e) => {
+                        selectedSquare = { r, c };
+                        validMoves = getSafeMoves(r, c, boardState);
+                        renderBoard();
+
+                        e.dataTransfer.setData('text/fromR', r);
+                        e.dataTransfer.setData('text/fromC', c);
+                    });
+                }
             }
 
             if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
@@ -141,12 +184,12 @@ function renderBoard() {
                 square.classList.add('possible-move');
             }
 
+            // Tetap pertahankan event Klik biasa
             square.addEventListener('click', () => handleSquareClick(r, c));
             boardElement.appendChild(square);
         }
     }
 }
-
 function getPieceColor(piece) {
     if (!piece) return null;
     return piece === piece.toUpperCase() ? 'white' : 'black';
