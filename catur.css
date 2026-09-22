@@ -133,26 +133,30 @@ body {
     transform: scale(0.95);
 }
 
-/* Papan Catur */
+/* Papan Catur Responsif */
 .board {
     display: grid;
-    grid-template-columns: repeat(8, 46px);
-    grid-template-rows: repeat(8, 46px);
+    grid-template-columns: repeat(8, 1fr); /* Otomatis bagi 8 kolom sama rata */
+    grid-template-rows: repeat(8, 1fr);
+    width: 100%;
+    max-width: 368px; /* Batas lebar maksimal di layar HP besar/Desktop */
+    aspect-ratio: 1 / 1; /* Menjaga bentuk papan tetap kotak sempurna */
     border: 2px solid #8b4513;
     border-radius: 6px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .square {
-    width: 44px;
-    height: 44px;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 36px;
+    font-size: clamp(20px, 8vw, 36px); /* Ukuran ikon catur fleksibel sesuai lebar layar */
     cursor: pointer;
     user-select: none;
 }
+
 
 .square.light {
     background-color: #fff8e1;
