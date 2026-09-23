@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Catur Online / Offline</title>
+    <!-- Font Awesome untuk Ikon Copy/Check -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="catur.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Panel Status Turn & Reset -->
+        <div class="status-panel">
+            <div id="status">Giliran: <span id="turn">Putih</span></div>
+            <button id="reset-btn" class="btn-small">Mulai Ulang</button>
+        </div>
+
+        <div class="room-panel">
+            <div class="room-buttons">
+                <button id="create-room-btn" class="btn-small">Buat Room</button>
+                <button id="vs-computer-btn" class="btn-small btn-vs-comp">Komputer</button>
+                <button id="join-room-btn" class="btn-small btn-join">Masuk Room</button>
+            </div>
+
+            <!-- Input dan Tombol berdampingan dalam satu baris -->
+            <div class="room-id-wrapper">
+                <input type="text" id="room-id" placeholder="Masukkan ID Room..." />
+                <button id="copyButton" class="copy-button" title="Salin ID Room">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Papan Catur -->
+        <div id="board" class="board"></div>
+    </div> <!-- Tag penutup container -->
+
+    <!-- Modal Pop-Up Notifikasi Kustom (Diposisikan independen di tingkat body) -->
+    <div id="customAlert" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon">🏆</div>
+            <div id="modalMessage" class="modal-message">Pesan Notifikasi</div>
+            <button onclick="closeAlert()" class="modal-btn">Oke</button>
+        </div>
+    </div>
+
+    <!-- Library Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="catur.js"></script>
+</body>
+</html>
