@@ -17,27 +17,26 @@
         </div>
 
         <div class="room-panel">
-    <div class="room-buttons">
-        <button id="create-room-btn" class="btn-small">Buat Room</button>
-        <button id="vs-computer-btn" class="btn-small btn-vs-comp">Komputer</button>
-        <button id="join-room-btn" class="btn-small btn-join">Masuk Room</button>
-    </div>
+            <div class="room-buttons">
+                <button id="create-room-btn" class="btn-small">Buat Room</button>
+                <button id="vs-computer-btn" class="btn-small btn-vs-comp">Komputer</button>
+                <button id="join-room-btn" class="btn-small btn-join">Masuk Room</button>
+            </div>
 
-    <!-- Input dan Tombol berdampingan dalam satu baris -->
-    <div class="room-id-wrapper">
-        <input type="text" id="room-id" placeholder="Masukkan ID Room..." />
-        <button id="copyButton" class="copy-button" title="Salin ID Room">
-            <i class="fas fa-copy"></i>
-        </button>
-    </div>
-</div>
-
+            <!-- Input dan Tombol berdampingan dalam satu baris -->
+            <div class="room-id-wrapper">
+                <input type="text" id="room-id" placeholder="Masukkan ID Room..." />
+                <button id="copyButton" class="copy-button" title="Salin ID Room">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+        </div>
 
         <!-- Papan Catur -->
         <div id="board" class="board"></div>
-    </div>
+    </div> <!-- Tag penutup container -->
 
-    <!-- Modal Pop-Up Notifikasi Kustom -->
+    <!-- Modal Pop-Up Notifikasi Kustom (Diposisikan independen di tingkat body) -->
     <div id="customAlert" class="modal-overlay">
         <div class="modal-box">
             <div class="modal-icon">🏆</div>
