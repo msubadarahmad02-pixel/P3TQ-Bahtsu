@@ -322,3 +322,38 @@ body {
 .copy-button:active {
     transform: scale(0.95);
 }
+/* Style tombol kunci */
+.lock-button {
+    background-color: #8b4513;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.lock-button.locked {
+    background-color: #c2185b; /* Warna penanda saat terkunci */
+}
+
+.lock-button:hover {
+    background-color: #c2185b;
+}
+
+.lock-button:active {
+    transform: scale(0.95);
+}
+
+/* Tampilan visual saat tombol di-disable */
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
