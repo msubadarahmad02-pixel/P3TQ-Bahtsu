@@ -47,6 +47,16 @@
             <button onclick="closeAlert()" class="modal-btn">Oke</button>
         </div>
     </div>
+<!-- Script Registrasi Service Worker -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('SW Registered!', reg))
+            .catch(err => console.error('SW Registration Failed!', err));
+        });
+      }
+    </script>
 
     <!-- Library Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
