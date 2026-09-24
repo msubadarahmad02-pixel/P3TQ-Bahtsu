@@ -181,13 +181,26 @@ body {
     background-color: #769656 !important;
 }
 
+/* Highlight Petak Asal dan Tujuan Langkah Terakhir (Persis Chess.com) */
+.square.last-move {
+    background-color: rgba(247, 247, 105, 0.8) !important; /* Yellow soft transparan */
+}
+
+/* Khusus jika petak last-move berada di atas petak gelap (hijau) */
+.square.dark.last-move {
+    background-color: #baca44 !important; /* Warna olive/kuning-hijau khas Chess.com */
+}
+
+/* Khusus jika petak last-move berada di atas petak terang (krem) */
+.square.light.last-move {
+    background-color: #f7f769 !important; /* Warna kuning terang Chess.com */
+}
+
+/* Petak Terpilih (Saat Bidak Diklik) */
 .square.selected {
     background-color: #baca44 !important;
 }
 
-.square.last-move {
-    background-color: #f7f769 !important;
-}
 
 .square.possible-move::after {
     content: '';
