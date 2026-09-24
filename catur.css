@@ -139,7 +139,7 @@ body {
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
     width: 100%;
-    max-width: 368px;
+    max-width: 400px;
     aspect-ratio: 1 / 1;
     border: 2px solid #8b4513;
     border-radius: 6px;
