@@ -857,7 +857,7 @@ if (resetBtn) {
 
         // Proteksi: Jika sedang main online dan game belum selesai
         if (currentRoomId && gameStatus === 'playing') {
-            showAlert("Permainan masih berlansung! jangan curang kak😝");
+            showAlert("Permainan berlansung! jangan curang kak😝");
             return;
         }
 
@@ -891,3 +891,35 @@ if (resetBtn) {
 // ALUR STARTUP APLIKASI
 initGame(false);
 checkAndRestoreRoom();
+
+
+// Deklarasi Variabel Kunci
+let isLocked = false;
+const lockButton = document.getElementById('lockButton');
+
+// Fitur Tombol Kunci (Lock/Unlock)
+if (lockButton) {
+    lockButton.addEventListener('click', () => {
+        isLocked = !isLocked;
+
+        // Daftar tombol yang akan dikunci/dinonaktifkan
+        const buttonsToToggle = [resetBtn, createRoomBtn, vsComputerBtn, joinRoomBtn];
+
+        buttonsToToggle.forEach(btn => {
+            if (btn) btn.disabled = isLocked;
+        });
+
+        if (isLocked) {
+            lockButton.classList.add('locked');
+            lockButton.innerHTML = '<i class="fas fa-lock"></i>';
+            lockButton.title = "Buka Kunci Tombol";
+            showAlert("Tombol kontrol telah dikunci!");
+        } else {
+            lockButton.classList.remove('locked');
+            lockButton.innerHTML = '<i class="fas fa-lock-open"></i>';
+            lockButton.title = "Kunci Tombol";
+            showAlert("Kunci tombol dibuka.");
+        }
+    });
+}
+
