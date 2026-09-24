@@ -847,9 +847,20 @@ async function checkAndRestoreRoom() {
     }
 }
 
-// Reset Button Event Listener
+// Reset Button Event Listener dengan Validasi Status Permainan
 if (resetBtn) {
     resetBtn.addEventListener('click', async () => {
+        if (isLocked) {
+            showAlert("Tombol sedang dikunci! Buka kunci terlebih dahulu untuk mulai ulang.");
+            return;
+        }
+
+        // Proteksi: Jika sedang main online dan game belum selesai
+        if (currentRoomId && gameStatus === 'playing') {
+            showAlert("Permainan masih berlansung! jangan curang kak😝");
+            return;
+        }
+
         if (currentRoomId) {
             try {
                 await supabaseClient.from('catur_rooms').update({
@@ -875,6 +886,7 @@ if (resetBtn) {
         }
     });
 }
+
 
 // ALUR STARTUP APLIKASI
 initGame(false);
