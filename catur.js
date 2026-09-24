@@ -847,50 +847,77 @@ async function checkAndRestoreRoom() {
     }
 }
 
-// Reset Button Event Listener dengan Validasi Status Permainan
-if (resetBtn) {
-    resetBtn.addEventListener('click', async () => {
-        if (isLocked) {
-            showAlert("Tombol sedang dikunci! Buka kunci terlebih dahulu untuk mulai ulang.");
-            return;
-        }
+// Restore Room jika Browser Direfresh (Versi Baru)
+async function checkAndRestoreRoom() {
+    const savedRoomId = localStorage.getItem('active_room_id');
+    const savedColor = localStorage.getItem('active_player_color');
 
-        // Proteksi: Jika sedang main online dan game belum selesai
-        if (currentRoomId && gameStatus === 'playing') {
-            showAlert("Permainan berlansung! jangan curang kak😝");
-            return;
-        }
+    if (savedRoomId && savedColor) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('catur_rooms')
+                .select('*')
+                .eq('room_id', savedRoomId)
+                .single();
 
-        if (currentRoomId) {
-            try {
-                await supabaseClient.from('catur_rooms').update({
-                    board_state: JSON.stringify(initialBoard),
-                    current_turn: 'white',
-                    last_move: null,
-                    has_moved: JSON.stringify({
-                        'K': false, 'R_k': false, 'R_q': false,
-                        'k': false, 'r_k': false, 'r_q': false
-                    }),
-                    en_passant: null,
-                    status: 'playing'
-                }).eq('room_id', currentRoomId);
+            if (data && !error) {
+                currentRoomId = savedRoomId;
+                playerColor = savedColor;
+                isComputerMode = false;
 
-                initGame(true);
-                showAlert("Permainan diulang! Papan catur telah di-reset.");
-            } catch (err) {
-                console.error("Gagal reset room:", err);
-                showAlert("Gagal mereset permainan.");
+                if (roomIdInput) roomIdInput.value = savedRoomId;
+
+                boardState = typeof data.board_state === 'string' ? JSON.parse(data.board_state) : data.board_state;
+                currentTurn = data.current_turn;
+                gameStatus = data.status || 'playing';
+                
+                if (data.last_move) {
+                    lastMove = typeof data.last_move === 'string' ? JSON.parse(data.last_move) : data.last_move;
+                }
+
+                if (data.has_moved) {
+                    hasMoved = typeof data.has_moved === 'string' ? JSON.parse(data.has_moved) : data.has_moved;
+                }
+
+                if (data.en_passant) {
+                    try {
+                        const parsed = typeof data.en_passant === 'string' ? JSON.parse(data.en_passant) : data.en_passant;
+                        enPassantTarget = (parsed && typeof parsed === 'object') ? parsed : null;
+                    } catch (e) {
+                        enPassantTarget = null;
+                    }
+                } else {
+                    enPassantTarget = null;
+                }
+
+                listenToRoom(savedRoomId);
+                updateTurnUI();
+                return true; // Berhasil restore
             }
-        } else {
-            initGame(false);
+        } catch (err) {
+            console.error("Gagal memulihkan room:", err);
         }
-    });
+    }
+    return false; // Gagal restore / tidak ada sesi
 }
 
+// ALUR STARTUP APLIKASI (Pengganti initGame(false); checkAndRestoreRoom();)
+async function startApp() {
+    const savedRoomId = localStorage.getItem('active_room_id');
+    const savedColor = localStorage.getItem('active_player_color');
 
-// ALUR STARTUP APLIKASI
-initGame(false);
-checkAndRestoreRoom();
+    if (savedRoomId && savedColor) {
+        const restored = await checkAndRestoreRoom();
+        if (!restored) {
+            initGame(false);
+        }
+    } else {
+        initGame(false);
+    }
+}
+
+startApp();
+
 
 
 // Deklarasi Variabel Kunci
