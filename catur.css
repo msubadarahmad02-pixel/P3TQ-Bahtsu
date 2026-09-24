@@ -170,35 +170,48 @@ body {
     cursor: grabbing;
 }
 
+/* --- WARNA PAPAN CATUR SEPERTI CHESS.COM --- */
+
+/* Petak Terang */
 .square.light {
-    background-color: #fff8e1;
+    background-color: #eeeed2 !important;
 }
 
+/* Petak Gelap */
 .square.dark {
-    background-color: #d7ccc8;
+    background-color: #769656 !important;
 }
 
+/* Petak Terpilih (Selected Square) */
 .square.selected {
-    background-color: #f8bbd0 !important;
+    background-color: #baca44 !important;
 }
 
+/* Highlight Petak Asal dan Tujuan Langkah Terakhir (Last Move) */
+.square.last-move {
+    background-color: #f7f769 !important;
+}
+
+/* Indicator Titik Langkah yang Boleh Dipilih (Possible Move) */
+.square.possible-move::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background-color: rgba(20, 85, 30, 0.4); /* Lingkaran hijau transparan */
+    border-radius: 50%;
+}
+
+/* Pengaturan Bidak Hitam dan Putih agar Kontras & Jelas */
 .piece-white {
-    color: #8b4513;
-    text-shadow: 0px 0px 2px #ffffff;
+    color: #ffffff;
+    text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .piece-black {
-    color: #000000;
-    text-shadow: 0px 0px 1px #ffffff;
+    color: #312e2b;
+    text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.4);
 }
 
-.square.possible-move::after {
-    content: '';
-    width: 12px;
-    height: 12px;
-    background-color: rgba(194, 24, 91, 0.4);
-    border-radius: 50%;
-}
 
 /* Modal Pop-up */
 .modal-overlay {
