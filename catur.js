@@ -13,11 +13,22 @@ if (!playerId) {
     localStorage.setItem('chess_player_id', playerId);
 }
 
-// Simbol Bidak
+// Simbol Bidak (Menggunakan Aset Gambar SVG Vektor Chess.com)
 const PIECES = {
-    'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟', 
-    'R': '♜', 'N': '♞', 'B': '♝', 'Q': '♛', 'K': '♚', 'P': '♟'  
+    'P': 'https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wp.png',
+    'R': 'https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wr.png',
+    'N': 'https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wn.png',
+    'B': 'https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wb.png',
+    'Q': 'https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wq.png',
+    'K': 'https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wk.png',
+    'p': 'https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bp.png',
+    'r': 'https://images.chesscomfiles.com/chess-themes/pieces/neo/150/br.png',
+    'n': 'https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bn.png',
+    'b': 'https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bb.png',
+    'q': 'https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bq.png',
+    'k': 'https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bk.png'
 };
+
 
 const initialBoard = [
     ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
@@ -157,26 +168,29 @@ function renderBoard() {
             });
 
             // --- ISI BIDAK & EVENT DRAG (DRAGSTART) ---
-            const pieceCode = currentBoard[r] ? currentBoard[r][c] : '';
-            if (pieceCode) {
-                square.textContent = PIECES[pieceCode] || '';
-                const pieceColor = getPieceColor(pieceCode);
-                const colorClass = pieceColor === 'white' ? 'piece-white' : 'piece-black';
-                square.classList.add(colorClass);
+const pieceCode = currentBoard[r] ? currentBoard[r][c] : '';
+if (pieceCode) {
+    const pieceImg = document.createElement('img');
+    pieceImg.src = PIECES[pieceCode];
+    pieceImg.classList.add('piece-img');
+    square.appendChild(pieceImg);
 
-                // Buat bidak bisa di-drag jika sesuai giliran & warna pemain
-                if (pieceColor === currentTurn && (!playerColor || pieceColor === playerColor)) {
-                    square.setAttribute('draggable', 'true');
+    const pieceColor = getPieceColor(pieceCode);
 
-                    square.addEventListener('dragstart', (e) => {
-                        selectedSquare = { r, c };
-                        validMoves = getSafeMoves(r, c, currentBoard);
-                        renderBoard();
+    // Buat bidak bisa di-drag jika sesuai giliran & warna pemain
+    if (pieceColor === currentTurn && (!playerColor || pieceColor === playerColor)) {
+        square.setAttribute('draggable', 'true');
 
-                        e.dataTransfer.setData('text/plain', JSON.stringify({ fromR: r, fromC: c }));
-                    });
-                }
-            }
+        square.addEventListener('dragstart', (e) => {
+            selectedSquare = { r, c };
+            validMoves = getSafeMoves(r, c, currentBoard);
+            renderBoard();
+
+            e.dataTransfer.setData('text/plain', JSON.stringify({ fromR: r, fromC: c }));
+        });
+    }
+}
+
 
             // Highlighting / Penanda Visual Petak
             if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
