@@ -141,7 +141,7 @@ body {
     width: 100%;
     max-width: 400px;
     aspect-ratio: 1 / 1;
-    border: 2px solid #8b4513;
+    border: 2px solid #ffffff;
     border-radius: 6px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     overflow: hidden; /* Tambahan: Mencegah overflow petak di layar HP berukuran sangat kecil */
