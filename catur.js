@@ -921,24 +921,51 @@ if (lockButton) {
 
 
 if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
+    resetBtn.addEventListener('click', async () => {
         // 1. Cek Kunci Tombol (Fitur Gembok)
         if (typeof isLocked !== 'undefined' && isLocked) {
             showAlert("Tombol sedang dikunci! Buka kunci terlebih dahulu untuk mulai ulang.");
             return;
         }
 
-        // 2. Blokir Total Reset Saat Bermain Online
+        // 2. Cek Logika Permainan Online
         if (currentRoomId) {
-            showAlert("masih main! jangan curang kak😝");
+            // Jika permainan masih berlangsung, cegah reset
+            if (gameStatus === 'playing') {
+                showAlert("masih main! jangan curang kak😝");
+                return;
+            }
+
+            // Jika permainan SUDAH SELESAI (checkmate / stalemate), reset papan di Supabase
+            try {
+                const { error } = await supabaseClient.from('catur_rooms').update({
+                    board_state: JSON.stringify(initialBoard),
+                    current_turn: 'white',
+                    last_move: null,
+                    has_moved: JSON.stringify({
+                        'K': false, 'R_k': false, 'R_q': false,
+                        'k': false, 'r_k': false, 'r_q': false
+                    }),
+                    en_passant: null,
+                    status: 'playing'
+                }).eq('room_id', currentRoomId);
+
+                if (error) {
+                    showAlert("Gagal mereset permainan di room!");
+                } else {
+                    showAlert("Permainan di-reset! Selamat bermain kembali.");
+                }
+            } catch (err) {
+                console.error("Gagal reset room:", err);
+                showAlert("Terjadi kesalahan jaringan saat mereset permainan!");
+            }
             return;
         }
 
-        // 3. Reset Hanya untuk Mode Offline / Komputer
+        // 3. Reset untuk Mode Offline / Komputer
         const currentCompMode = isComputerMode;
         initGame(false); // Reset papan ke posisi awal
 
-        // Jika sebelumnya mode komputer, aktifkan kembali mode komputernya
         if (currentCompMode) {
             isComputerMode = true;
             playerColor = 'white';
@@ -948,3 +975,4 @@ if (resetBtn) {
         }
     });
 }
+
