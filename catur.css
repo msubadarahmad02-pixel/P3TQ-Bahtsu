@@ -170,15 +170,56 @@ body {
     cursor: grabbing;
 }
 
-/* --- WARNA PAPAN CATUR SEPERTI CHESS.COM --- */
+/* Styling kontainer pemilih warna */
+.color-picker-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-/* --- WARNA PAPAN CATUR ALA CHESS.COM --- */
+.color-picker-group label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.85em;
+}
+
+.color-picker-group input[type="color"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    background: none;
+    outline: none;
+}
+
+.color-picker-group input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-picker-group input[type="color"]::-webkit-color-swatch {
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* --- WARNA PAPAN CATUR DINAMIS --- */
+:root {
+    --square-light-color: #eeeed2;
+    --square-dark-color: #b58863;
+}
+
+/* Menggunakan CSS Variables */
 .square.light {
-    background-color: #eeeed2 !important;
+    background-color: var(--square-light-color) !important;
 }
 
 .square.dark {
-    background-color: #c7a07fff !important;
+    background-color: var(--square-dark-color) !important;
 }
 
 /* Highlight Petak Asal dan Tujuan Langkah Terakhir (Persis Chess.com) */
