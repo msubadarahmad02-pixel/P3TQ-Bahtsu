@@ -13,17 +13,22 @@
         <!-- Panel Status Turn & Reset -->
 <div class="status-panel">
     <div id="status">Giliran: <span id="turn">Putih</span></div>
+    
+    <!-- Tombol Kustom Color Picker -->
     <div class="color-picker-group">
-        <!-- Input Pemilih Warna Petak Terang & Gelap -->
-        <label title="putih">
-            ⚪ <input type="color" id="picker-light" value="#eeeed2">
-        </label>
-        <label title="hitam">
-            ⚫ <input type="color" id="picker-dark" value="#b58863">
-        </label>
+        <button id="btn-picker-light" class="btn-color-preview" title="Pilih Warna Petak Terang">
+            ⚪
+            <input type="color" id="picker-light" value="#eeeed2">
+        </button>
+        <button id="btn-picker-dark" class="btn-color-preview" title="Pilih Warna Petak Gelap">
+            ⚫
+            <input type="color" id="picker-dark" value="#b58863">
+        </button>
     </div>
+
     <button id="reset-btn" class="btn-small">Reset</button>
 </div>
+
 
 
 
