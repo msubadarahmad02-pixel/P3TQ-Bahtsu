@@ -10,15 +10,21 @@
 </head>
 <body>
     <div class="container">
-        <!-- Panel Status Turn, Theme Toggle & Reset -->
+        <!-- Panel Status Turn & Reset -->
 <div class="status-panel">
     <div id="status">Giliran: <span id="turn">Putih</span></div>
-    <div class="status-actions">
-        <!-- Tombol Ubah Warna Board -->
-        <button id="theme-btn" class="btn-small" title="Ganti Tema Warna Papan">🎨</button>
-        <button id="reset-btn" class="btn-small">Reset</button>
+    <div class="color-picker-group">
+        <!-- Input Pemilih Warna Petak Terang & Gelap -->
+        <label title="putih">
+            ⚪ <input type="color" id="picker-light" value="#eeeed2">
+        </label>
+        <label title="hitam">
+            ⚫ <input type="color" id="picker-dark" value="#b58863">
+        </label>
     </div>
+    <button id="reset-btn" class="btn-small">Reset</button>
 </div>
+
 
 
         <div class="room-panel">
