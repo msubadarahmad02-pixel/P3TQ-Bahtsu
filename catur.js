@@ -1035,4 +1035,50 @@ if (themeBtn) {
         localStorage.setItem('chess_board_theme', newTheme);
     });
 }
+// ===================================================
+// FITUR KUSTOMISASI WARNA PAPAN (COLOR PICKER)
+// ===================================================
+const pickerLight = document.getElementById('picker-light');
+const pickerDark = document.getElementById('picker-dark');
+
+// Fungsi untuk mengaplikasikan warna ke CSS Variables & LocalStorage
+function setBoardColors(lightColor, darkColor) {
+    document.documentElement.style.setProperty('--square-light-color', lightColor);
+    document.documentElement.style.setProperty('--square-dark-color', darkColor);
+    
+    if (pickerLight) pickerLight.value = lightColor;
+    if (pickerDark) pickerDark.value = darkColor;
+
+    localStorage.setItem('chess_custom_light', lightColor);
+    localStorage.setItem('chess_custom_dark', darkColor);
+}
+
+// Muat warna tersimpan dari LocalStorage saat halaman pertama kali dimuat
+const savedLight = localStorage.getItem('chess_custom_light') || '#eeeed2';
+const savedDark = localStorage.getItem('chess_custom_dark') || '#b58863';
+setBoardColors(savedLight, savedDark);
+
+// Event Listener untuk memilih warna petak terang
+if (pickerLight) {
+    pickerLight.addEventListener('input', (e) => {
+        if (typeof isLocked !== 'undefined' && isLocked) {
+            showAlert("Tombol sedang dikunci! Buka kunci terlebih dahulu.");
+            pickerLight.value = localStorage.getItem('chess_custom_light') || '#eeeed2';
+            return;
+        }
+        setBoardColors(e.target.value, pickerDark ? pickerDark.value : '#b58863');
+    });
+}
+
+// Event Listener untuk memilih warna petak gelap
+if (pickerDark) {
+    pickerDark.addEventListener('input', (e) => {
+        if (typeof isLocked !== 'undefined' && isLocked) {
+            showAlert("Tombol sedang dikunci! Buka kunci terlebih dahulu.");
+            pickerDark.value = localStorage.getItem('chess_custom_dark') || '#b58863';
+            return;
+        }
+        setBoardColors(pickerLight ? pickerLight.value : '#eeeed2', e.target.value);
+    });
+}
 
