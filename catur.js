@@ -1002,39 +1002,7 @@ if (resetBtn) {
     });
 }
 
-// --- FITUR GANTI TEMA / WARNA PAPAN CATUR ---
-const themeBtn = document.getElementById('theme-btn');
-const themes = ['theme-classic', 'theme-green', 'theme-wood', 'theme-dark'];
-let currentThemeIndex = 0;
 
-// Muat tema yang tersimpan dari LocalStorage saat pertama buka
-const savedTheme = localStorage.getItem('chess_board_theme');
-if (savedTheme && boardElement) {
-    boardElement.className = `board ${savedTheme}`;
-    currentThemeIndex = themes.indexOf(savedTheme) !== -1 ? themes.indexOf(savedTheme) : 0;
-}
-
-if (themeBtn) {
-    themeBtn.addEventListener('click', () => {
-        if (typeof isLocked !== 'undefined' && isLocked) {
-            showAlert("Tombol sedang dikunci! Buka kunci terlebih dahulu.");
-            return;
-        }
-
-        // berpindah ke tema berikutnya
-        currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-        const newTheme = themes[currentThemeIndex];
-
-        // Hapus tema lama & terapkan tema baru pada elemen #board
-        boardElement.className = 'board';
-        if (newTheme !== 'theme-classic') {
-            boardElement.classList.add(newTheme);
-        }
-
-        // Simpan preferensi warna ke LocalStorage
-        localStorage.setItem('chess_board_theme', newTheme);
-    });
-}
 // ===================================================
 // FITUR KUSTOMISASI WARNA PAPAN (COLOR PICKER)
 // ===================================================
