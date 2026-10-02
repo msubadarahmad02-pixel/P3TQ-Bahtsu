@@ -448,36 +448,17 @@ button:disabled {
     gap: 6px;
 }
 
-/* --- TEMA PAPAN CATUR --- */
+/* --- WARNA PAPAN CATUR DINAMIS --- */
+:root {
+    --square-light-color: #eeeed2;
+    --square-dark-color: #b58863;
+}
 
-/* 1. Tema Default (Chess.com Classic / Brown & Cream) */
+/* Menggunakan CSS Variables untuk Color Picker */
 .square.light {
-    background-color: #eeeed2 !important;
+    background-color: var(--square-light-color) !important;
 }
+
 .square.dark {
-    background-color: #b58863 !important; /* Diperbarui agar lebih kontras */
-}
-
-/* 2. Tema Hijau / Green Chess.com Style */
-.board.theme-green .square.light {
-    background-color: #eeeed2 !important;
-}
-.board.theme-green .square.dark {
-    background-color: #769656 !important;
-}
-
-/* 3. Tema Wood / Kayu */
-.board.theme-wood .square.light {
-    background-color: #f0d9b5 !important;
-}
-.board.theme-wood .square.dark {
-    background-color: #b58863 !important;
-}
-
-/* 4. Tema Modern / Dark Mode Slate */
-.board.theme-dark .square.light {
-    background-color: #9e9e9e !important;
-}
-.board.theme-dark .square.dark {
-    background-color: #424242 !important;
+    background-color: var(--square-dark-color) !important;
 }
