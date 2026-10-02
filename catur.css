@@ -401,3 +401,42 @@ button:disabled {
     cursor: not-allowed !important;
     pointer-events: none;
 }
+/* Styling kontainer tombol kanan di status panel */
+.status-actions {
+    display: flex;
+    gap: 6px;
+}
+
+/* --- TEMA PAPAN CATUR --- */
+
+/* 1. Tema Default (Chess.com Classic / Brown & Cream) */
+.square.light {
+    background-color: #eeeed2 !important;
+}
+.square.dark {
+    background-color: #b58863 !important; /* Diperbarui agar lebih kontras */
+}
+
+/* 2. Tema Hijau / Green Chess.com Style */
+.board.theme-green .square.light {
+    background-color: #eeeed2 !important;
+}
+.board.theme-green .square.dark {
+    background-color: #769656 !important;
+}
+
+/* 3. Tema Wood / Kayu */
+.board.theme-wood .square.light {
+    background-color: #f0d9b5 !important;
+}
+.board.theme-wood .square.dark {
+    background-color: #b58863 !important;
+}
+
+/* 4. Tema Modern / Dark Mode Slate */
+.board.theme-dark .square.light {
+    background-color: #9e9e9e !important;
+}
+.board.theme-dark .square.dark {
+    background-color: #424242 !important;
+}
