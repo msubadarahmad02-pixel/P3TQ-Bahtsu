@@ -1004,10 +1004,12 @@ if (resetBtn) {
 
 
 // ===================================================
-// FITUR KUSTOMISASI WARNA PAPAN (COLOR PICKER)
+// FITUR KUSTOMISASI WARNA PAPAN (DIRECT COLOR PICKER)
 // ===================================================
 const pickerLight = document.getElementById('picker-light');
 const pickerDark = document.getElementById('picker-dark');
+const btnPickerLight = document.getElementById('btn-picker-light');
+const btnPickerDark = document.getElementById('btn-picker-dark');
 
 // Fungsi untuk mengaplikasikan warna ke CSS Variables & LocalStorage
 function setBoardColors(lightColor, darkColor) {
@@ -1026,27 +1028,35 @@ const savedLight = localStorage.getItem('chess_custom_light') || '#eeeed2';
 const savedDark = localStorage.getItem('chess_custom_dark') || '#b58863';
 setBoardColors(savedLight, savedDark);
 
-// Event Listener untuk memilih warna petak terang
-if (pickerLight) {
-    pickerLight.addEventListener('input', (e) => {
+// Trigger langsung input color saat tombol pembungkus diklik
+if (btnPickerLight && pickerLight) {
+    btnPickerLight.addEventListener('click', (e) => {
         if (typeof isLocked !== 'undefined' && isLocked) {
             showAlert("Tombol sedang dikunci! Buka kunci terlebih dahulu.");
-            pickerLight.value = localStorage.getItem('chess_custom_light') || '#eeeed2';
             return;
         }
+        if (e.target !== pickerLight) {
+            pickerLight.click();
+        }
+    });
+
+    pickerLight.addEventListener('input', (e) => {
         setBoardColors(e.target.value, pickerDark ? pickerDark.value : '#b58863');
     });
 }
 
-// Event Listener untuk memilih warna petak gelap
-if (pickerDark) {
-    pickerDark.addEventListener('input', (e) => {
+if (btnPickerDark && pickerDark) {
+    btnPickerDark.addEventListener('click', (e) => {
         if (typeof isLocked !== 'undefined' && isLocked) {
             showAlert("Tombol sedang dikunci! Buka kunci terlebih dahulu.");
-            pickerDark.value = localStorage.getItem('chess_custom_dark') || '#b58863';
             return;
         }
+        if (e.target !== pickerDark) {
+            pickerDark.click();
+        }
+    });
+
+    pickerDark.addEventListener('input', (e) => {
         setBoardColors(pickerLight ? pickerLight.value : '#eeeed2', e.target.value);
     });
 }
-
