@@ -190,7 +190,7 @@ body {
     appearance: none;
     width: 28px;
     height: 28px;
-    border: #8b4513;
+    border: none;
     border-radius: 50%;
     cursor: pointer;
     background: none;
@@ -202,7 +202,7 @@ body {
 }
 
 .color-picker-group input[type="color"]::-webkit-color-swatch {
-    border: 2px solid #ffffff;
+    border: 2px solid #8b4513;
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
