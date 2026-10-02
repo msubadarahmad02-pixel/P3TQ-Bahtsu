@@ -454,7 +454,53 @@ button:disabled {
     --square-dark-color: #b58863;
 }
 
-/* Menggunakan CSS Variables untuk Color Picker */
+/* ===================================================
+   FITUR KUSTOMISASI WARNA PAPAN (DIRECT COLOR PICKER)
+   =================================================== */
+
+/* Container Tombol Pemilih Warna */
+.color-picker-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Tombol Lingkaran Preview Warna */
+.btn-color-preview {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #d88998;
+    background-color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    overflow: hidden;
+    font-size: 0.85em;
+    padding: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Menyembunyikan Input Color bawaan secara transparan di atas tombol */
+.btn-color-preview input[type="color"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    opacity: 0;
+    cursor: pointer;
+    transform: translate(-25%, -25%);
+}
+
+/* CSS Variables & Styling Petak */
+:root {
+    --square-light-color: #eeeed2;
+    --square-dark-color: #b58863;
+}
+
 .square.light {
     background-color: var(--square-light-color) !important;
 }
