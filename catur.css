@@ -190,7 +190,7 @@ body {
     appearance: none;
     width: 28px;
     height: 28px;
-    border: none;
+    border: #8b4513;
     border-radius: 50%;
     cursor: pointer;
     background: none;
