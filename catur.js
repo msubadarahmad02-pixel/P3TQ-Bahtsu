@@ -725,8 +725,16 @@ function listenToRoom(roomId) {
                 updateTurnUI();
             }
         })
+        /* SISTEM CHAT REAL-TIME (BROADCAST) */
+        .on('broadcast', { event: 'chat_message' }, payload => {
+            const data = payload.payload;
+            if (data && data.senderId !== playerId) {
+                appendChatMessage(data.senderColor, data.message, false);
+            }
+        })
         .subscribe();
 }
+
 
 if (vsComputerBtn) {
     vsComputerBtn.addEventListener('click', () => {
@@ -1045,3 +1053,122 @@ if (pickerDark) {
         setBoardColors(pickerLight ? pickerLight.value : '#eeeed2', e.target.value);
     });
 }
+
+// ===================================================
+// FITUR CHAT ONLINE REAL-TIME (SUPABASE BROADCAST)
+// ===================================================
+const chatToggleBtn = document.getElementById('chat-toggle-btn');
+const closeChatBtn = document.getElementById('close-chat-btn');
+const chatBox = document.getElementById('chat-box');
+const chatForm = document.getElementById('chat-form');
+const chatInput = document.getElementById('chat-input');
+const chatMessages = document.getElementById('chat-messages');
+const chatBadge = document.getElementById('chat-badge');
+
+let isChatOpen = false;
+
+// 1. Toggle Buka/Tutup Jendela Chat
+if (chatToggleBtn && chatBox) {
+    chatToggleBtn.addEventListener('click', () => {
+        isChatOpen = !isChatOpen;
+        if (isChatOpen) {
+            chatBox.classList.remove('hidden');
+            if (chatBadge) chatBadge.classList.add('hidden'); // Sembunyikan notifikasi merah
+            if (chatInput) chatInput.focus();
+        } else {
+            chatBox.classList.add('hidden');
+        }
+    });
+}
+
+if (closeChatBtn && chatBox) {
+    closeChatBtn.addEventListener('click', () => {
+        isChatOpen = false;
+        chatBox.classList.add('hidden');
+    });
+}
+
+// 2. Kirim Pesan Chat
+if (chatForm) {
+    chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const text = chatInput ? chatInput.value.trim() : '';
+
+        if (!text) return;
+
+        if (!currentRoomId) {
+            showAlert("Kamu harus masuk ke Room Online terlebih dahulu untuk berobrolan!");
+            return;
+        }
+
+        const myColorText = playerColor === 'white' ? 'Putih' : 'Hitam';
+
+        // Tampilkan pesan sendiri di layar lokal
+        appendChatMessage(myColorText, text, true);
+
+        // Kirim pesan ke lawan via Supabase Broadcast
+        if (activeChannel) {
+            activeChannel.send({
+                type: 'broadcast',
+                event: 'chat_message',
+                payload: {
+                    senderColor: myColorText,
+                    senderId: playerId,
+                    message: text
+                }
+            });
+        }
+
+        if (chatInput) chatInput.value = '';
+    });
+}
+
+// 3. Menampilkan Pesan ke Area Riwayat Chat
+function appendChatMessage(sender, message, isMe) {
+    if (!chatMessages) return;
+
+    // Hapus pesan default "Masuk room..." jika ada
+    const systemMsg = chatMessages.querySelector('.chat-system-msg');
+    if (systemMsg) systemMsg.remove();
+
+    const bubble = document.createElement('div');
+    bubble.classList.add('chat-bubble', isMe ? 'my-msg' : 'peer-msg');
+
+    const senderName = document.createElement('div');
+    senderName.classList.add('chat-sender-name');
+    senderName.textContent = isMe ? 'Kamu' : sender;
+
+    const messageText = document.createElement('div');
+    messageText.textContent = message;
+
+    bubble.appendChild(senderName);
+    bubble.appendChild(messageText);
+
+    chatMessages.appendChild(bubble);
+
+    // Scroll otomatis ke paling bawah
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Tampilkan notifikasi titik merah jika chat sedang ditutup dan pesan dari lawan
+    if (!isMe && !isChatOpen && chatBadge) {
+        chatBadge.classList.remove('hidden');
+    }
+}
+
+// 4. Dengarkan Pesan Masuk dari Supabase
+// Cari fungsi `listenToRoom(roomId)` yang sudah ada di catur.js, lalu sesuaikan bagian `.channel(...)` nya menjadi:
+/* 
+CATATAN: Di dalam fungsi `listenToRoom(roomId)` yang sudah ada, tambahkan baris `.on('broadcast', ...)` ini tepat sebelum `.subscribe()`:
+
+activeChannel = supabaseClient
+    .channel(`room:${roomId}`)
+    .on('postgres_changes', { ... })
+    .on('broadcast', { event: 'chat_message' }, payload => {
+        const data = payload.payload;
+        if (data && data.senderId !== playerId) {
+            appendChatMessage(data.senderColor, data.message, false);
+        }
+    })
+    .subscribe();
+*/
+
