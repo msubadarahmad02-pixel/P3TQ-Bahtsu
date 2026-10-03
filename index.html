@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Catur Online / Offline</title>
-    <!-- Font Awesome untuk Ikon Copy/Check -->
+    <!-- Font Awesome untuk Ikon Copy/Check/Chat -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="catur.css">
 </head>
 <body>
     <div class="container">
         <!-- Panel Status Turn & Reset -->
-<div class="status-panel">
-    <div id="status">Giliran: <span id="turn">Putih</span></div>
-    <button id="reset-btn" class="btn-small">Reset</button>
-</div>
+        <div class="status-panel">
+            <div id="status">Giliran: <span id="turn">Putih</span></div>
+            <button id="reset-btn" class="btn-small">Reset</button>
+        </div>
 
         <div class="room-panel">
             <div class="room-buttons">
@@ -23,30 +23,53 @@
                 <button id="join-room-btn" class="btn-small btn-join">Masuk Room</button>
             </div>
 
-              <!-- Input dan Tombol berdampingan dalam satu baris -->
-<div class="room-id-wrapper">
-    <button id="lockButton" class="lock-button" title="Kunci Tombol">
-        <i class="fas fa-lock-open"></i>
-    </button>
-    <input type="text" id="room-id" placeholder="Masukkan ID Room..." />
-    <button id="copyButton" class="copy-button" title="Salin ID Room">
-        <i class="fas fa-copy"></i>
-    </button>
-
+            <!-- Input dan Tombol berdampingan dalam satu baris -->
+            <div class="room-id-wrapper">
+                <button id="lockButton" class="lock-button" title="Kunci Tombol">
+                    <i class="fas fa-lock-open"></i>
+                </button>
+                <input type="text" id="room-id" placeholder="Masukkan ID Room..." />
+                <button id="copyButton" class="copy-button" title="Salin ID Room">
+                    <i class="fas fa-copy"></i>
+                </button>
 
                 <div class="color-picker-group">
-        <label title="Petak Terang"><input type="color" id="picker-light" value="#eeeed2"></label>
-        <label title="Petak Gelap"><input type="color" id="picker-dark" value="#b58863"></label>
+                    <label title="Petak Terang"><input type="color" id="picker-light" value="#eeeed2"></label>
+                    <label title="Petak Gelap"><input type="color" id="picker-dark" value="#b58863"></label>
                 </div>
-    
-</div>
+
+                <!-- Tombol Buka/Tutup Chat -->
+                <button id="chat-toggle-btn" class="chat-toggle-button" title="Obrolan Online">
+                    <i class="fas fa-comments"></i>
+                    <span id="chat-badge" class="chat-badge hidden"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Pop-up Box Chat Melayang (Default: Sembunyi) -->
+        <div id="chat-box" class="chat-box hidden">
+            <div class="chat-header">
+                <span>💬 Obrolan Room</span>
+                <button id="close-chat-btn" class="chat-close-btn">&times;</button>
+            </div>
+            
+            <!-- Area Riwayat Pesan -->
+            <div id="chat-messages" class="chat-messages">
+                <div class="chat-system-msg">Masuk room online untuk mulai percakapan.</div>
+            </div>
+
+            <!-- Form Input Pesan Teks -->
+            <form id="chat-form" class="chat-input-row">
+                <input type="text" id="chat-input" placeholder="Tulis pesan..." maxlength="80" autocomplete="off">
+                <button type="submit" class="chat-send-btn"><i class="fas fa-paper-plane"></i></button>
+            </form>
         </div>
 
         <!-- Papan Catur -->
         <div id="board" class="board"></div>
     </div> <!-- Tag penutup container -->
 
-    <!-- Modal Pop-Up Notifikasi Kustom (Diposisikan independen di tingkat body) -->
+    <!-- Modal Pop-Up Notifikasi Kustom -->
     <div id="customAlert" class="modal-overlay">
         <div class="modal-box">
             <div class="modal-icon">🏆</div>
@@ -54,7 +77,8 @@
             <button onclick="closeAlert()" class="modal-btn">Oke</button>
         </div>
     </div>
-<!-- Script Registrasi Service Worker -->
+
+    <!-- Script Registrasi Service Worker -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
