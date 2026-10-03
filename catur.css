@@ -455,12 +455,11 @@ button:disabled {
 .hidden {
     display: none !important;
 }
-
 /* Tombol Ikon Chat di sebelah Color Picker */
 .chat-toggle-button {
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.6);
     color: #8b4153;
-    border: #8b4153;
+    border: 1px solid #8b4153; /* TAMBAHKAN 1px solid */
     padding: 8px 12px;
     border-radius: 8px;
     font-size: 0.85em;
