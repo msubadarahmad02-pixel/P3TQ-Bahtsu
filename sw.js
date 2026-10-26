@@ -4,11 +4,13 @@ const QURAN_CACHE = 'quran-images-v1'; // Cache khusus untuk gambar Qur'an
 
 const ASSETS_TO_CACHE = [
   './',
-  './img/icon2.png',
   './index.html',
-  './catur.css',
-  './catur.js',
-  './ai-worker.js',
+  './manifest.json', // <-- Tambahkan ini
+  './img/icon2.png', // <-- Pastikan ikon terdaftar
+  './alquran.css',
+  './alquran.js',
+  './baca_quran.html',
+  './baca_quran.js',
   new Request('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css', { mode: 'no-cors' }),
   new Request('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap', { mode: 'no-cors' })
 ];
