@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Surah & Juz</title>
+    <link rel="stylesheet" href="alquran.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="quran-header">
+        <button id="btnBackHome" class="btn-icon">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <h2 class="quran-title">Baca Quran</h2>
+        <div class="header-placeholder"></div>
+    </header>
+
+      <!-- Navigation Tabs (Surah / Juz / Tandai) -->
+    <div class="tab-container">
+        <button class="tab-btn active" id="tabSurah" onclick="switchTab('surah')">Surah</button>
+        <button class="tab-btn" id="tabJuz" onclick="switchTab('juz')">Juz</button>
+        <button class="tab-btn" id="tabTandai" onclick="switchTab('tandai')">Tandai</button>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-container" id="searchWrapper">
+        <input type="text" id="searchInput" placeholder="Cari Surah atau Juz..." onkeyup="filterList()">
+    </div>
+
+    <!-- Container Daftar List -->
+    <main class="list-container">
+        <div id="surahList" class="quran-list"></div>
+        <div id="juzList" class="quran-list" style="display: none;"></div>
+        <div id="tandaiList" class="quran-list" style="display: none;"></div>
+    </main>
+
+    <script src="alquran.js"></script>
+</body>
+</html>

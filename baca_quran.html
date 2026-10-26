@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Qur'an</title>
+    <link rel="stylesheet" href="alquran.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="viewer-body">
+
+        <!-- Header Top Viewer -->
+    <header class="quran-header">
+        <button onclick="window.location.href='alquran.html'" class="btn-icon">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        
+
+<!-- Wadah Judul, Tombol Kunci, Tombol Zoom, & Tombol Tandai -->
+<div class="title-lock-wrapper">
+    <h2 id="viewerTitle" class="quran-title">Halaman 1</h2>
+    
+    <!-- Tombol Kunci Layar -->
+    <button id="btnLockPage" class="btn-lock" title="Kunci Layar">
+        <i id="lockIcon" class="fa-solid fa-lock-open"></i>
+    </button>
+
+    <!-- Tombol Zoom In & Zoom Out -->
+    <button id="btnZoomIn" class="btn-lock" title="Perbesar">
+        <i class="fa-solid fa-magnifying-glass-plus"></i>
+    </button>
+    <button id="btnZoomOut" class="btn-lock" title="Perkecil">
+        <i class="fa-solid fa-magnifying-glass-minus"></i>
+    </button>
+
+    <!-- Tombol Tandai Halaman -->
+    <button id="btnBookmarkPage" class="btn-bookmark" title="Tandai Halaman">
+        <i id="bookmarkIcon" class="fa-regular fa-bookmark"></i>
+    </button>
+</div>
+            
+
+        <div class="header-placeholder"></div>
+    </header>
+
+    
+   <!-- Footer Baca Quran Minimalis -->
+<footer class="quran-footer">
+    <button id="btnNextPage" class="btn-nav primary">
+        <i class="fa-solid fa-chevron-left"></i> next
+    </button>
+
+    <!-- Area Lompat Halaman Ringkas -->
+    <div class="goto-page-wrapper">
+        <input type="number" id="goto-page-input" placeholder="Cari" min="1" max="604">
+        <button id="btnConfirmJump" class="btn-goto-page">Go</button>
+        <span class="total-page-badge">604</span>
+    </div>
+
+    <button id="btnPrevPage" class="btn-nav">
+        prev <i class="fa-solid fa-chevron-right"></i>
+    </button>
+</footer>
+    
+
+     <!-- Container Utama Flipbook -->
+  <main class="quran-viewer">
+        <div id="flipViewport" class="flip-viewport">
+            <div id="quranCard" class="quran-card">
+                <!-- Tampilan Gambar Halaman Saat Ini -->
+                <img id="currentImg" src="" alt="Halaman Quran">
+                
+                <!-- Layer Animasi Kertas Melengkung 3D -->
+                <div id="flipOverlay" class="flip-overlay">
+                    <img id="overlayImg" src="" alt="Page Flip">
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+
+    <script src="baca_quran.js"></script>
+</body>
+</html>
