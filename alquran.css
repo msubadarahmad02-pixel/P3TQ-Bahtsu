@@ -24,7 +24,7 @@ body {
 /* Header */
 .quran-header {
     background-color: #ffffff;
-    color: var(--text-dark);
+    color: var(--primary-orange);
     padding: 10px 16px;
     display: flex;
     align-items: center;
