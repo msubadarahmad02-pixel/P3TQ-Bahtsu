@@ -24,29 +24,53 @@ body {
 /* Header */
 .quran-header {
     background-color: #ffffff;
-    color: var(--primary-orange);
-    padding: 14px 16px;
+    color: var(--text-dark);
+    padding: 10px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid #e5e7eb;
-    position: relative; /* Wajib ada agar absolute title mengikut header */
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.quran-title { 
-    font-size: 1.5rem; 
-    font-weight: bold; 
-    margin: 0;
-    position: absolute; /* Mengunci posisi persis di tengah layar */
+/* Tombol Kembali di Siri Kiri */
+.quran-header > .btn-icon {
+    flex-shrink: 0;
+    z-index: 2; /* Agar bisa diklik dan di atas elemen lain */
+}
+
+/* Wadah Tombol-tombol di Tengah (Judul, Kunci, Zoom, Bookmark) */
+.title-lock-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    max-width: 75%; /* Batasi agar tidak menabrak sisi kiri/kanan */
+    overflow-x: auto; /* Bisa digeser jika layar terlalu kecil */
+    white-space: nowrap;
+    padding: 4px;
+}
+
+/* Teks Judul Halaman */
+.quran-title { 
+    font-size: 0.95rem; 
+    font-weight: bold; 
+    margin: 0;
     text-align: center;
 }
 
+/* Placeholder di Sisi Kanan untuk Keseimbangan */
 .header-placeholder {
-    width: 24px; /* Penyeimbang agar layout tetap simetris */
+    width: 32px; 
     height: 24px;
+    flex-shrink: 0;
 }
+
 
 .btn-icon { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-dark); }
 
@@ -349,12 +373,6 @@ html, body {
     box-sizing: border-box;
 }
 
-/* Styling Tombol Kunci Halaman */
-.title-lock-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
 
 .btn-lock {
     background: none;
