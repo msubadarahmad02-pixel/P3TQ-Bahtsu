@@ -30,9 +30,24 @@ body {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid #e5e7eb;
+    position: relative; /* Wajib ada agar absolute title mengikut header */
 }
 
-.quran-title { font-size: 1.1rem; font-weight: bold; text-align: center;}
+.quran-title { 
+    font-size: 1.5rem; 
+    font-weight: bold; 
+    margin: 0;
+    position: absolute; /* Mengunci posisi persis di tengah layar */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.header-placeholder {
+    width: 24px; /* Penyeimbang agar layout tetap simetris */
+    height: 24px;
+}
+
 .btn-icon { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-dark); }
 
 /* Tabs */
