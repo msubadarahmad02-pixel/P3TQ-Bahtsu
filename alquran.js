@@ -188,26 +188,31 @@ function renderSurah(list) {
     `).join("");
 }
 
-// Render List Juz (Menampilkan Nomor Halaman)
+// Render List Juz (Menampilkan Nama Surah pada Halaman & Nomor Halaman)
 function renderJuz(list) {
     const container = document.getElementById("juzList");
     if (!container) return;
 
-    container.innerHTML = list.map(j => `
-        <div class="item-card" onclick="bukaHalaman(${j.hal})">
-            <div class="item-left">
-                <div class="heart-badge">
-                    <span class="heart-number">${j.no}</span>
+    container.innerHTML = list.map(j => {
+        // Otomatis mencari nama Surah berdasarkan nomor halaman awal Juz tersebut
+        const surahTerkait = DATA_SURAH.slice().reverse().find(s => s.hal <= j.hal) || DATA_SURAH[0];
+
+        return `
+            <div class="item-card" onclick="bukaHalaman(${j.hal})">
+                <div class="item-left">
+                    <div class="heart-badge">
+                        <span class="heart-number">${j.no}</span>
+                    </div>
+                    <div>
+                        <div class="item-title">${j.nama}</div>
+                        <!-- Menampilkan Nama Surah dan Nomor Halaman -->
+                        <div class="item-sub"> ${surahTerkait.nama} (Hal. ${j.hal})</div>
+                    </div>
                 </div>
-                <div>
-                    <div class="item-title">${j.nama}</div>
-                    <!-- Mengubah sub-judul latin menjadi nomor halaman -->
-                    <div class="item-sub">Hal. ${j.hal}</div>
-                </div>
+                <div class="arabic-title">${j.arab}</div>
             </div>
-            <div class="arabic-title">${j.arab}</div>
-        </div>
-    `).join("");
+        `;
+    }).join("");
 }
 
 // ==========================================
